@@ -3,43 +3,49 @@ defmodule HanAms.Parser do
 
   alias HanAms.Lists
 
-  # 0x7E denotes start and end of message (HDLC Frame)
+
   def decode(<<rest::binary>>) do
 
     ## finn checksum
     # verifyChecksum(rest) # virker ikka akkurat nå
 
     ## fortsett å parse data
-    parse(rest, %{meter_time: parseTimestamp(rest)})
+    parse(rest, %{})
   end
 
 
-  defp parseTimestamp(<<
-                      0x7E,
-                      _::binary-size(16),
-                      0x09,
-                      some_length,
+  # defp parseTimestamp(<<
+  #                     0x7E,
+  #                     _::binary-size(16),
+  #                     0x09,
+  #                     some_length,
+  #                     date::binary-size(8),
+  #                     _::binary>>) do
+  #   parseNaiveDateTime(date)
+  # end
+
+  defp parseNaiveDateTime(<<
                       year::16,
                       month,
                       day,
                       _, # What is this? Nobody quite knows! ¯\_(ツ)_/¯
                       hour,
                       min,
-                      sec,
-                      _::binary>>) do
+                      sec>>) do
     NaiveDateTime.new(year, month, day, hour, min, sec, 0)
   end
 
   # Skip parts before data
+  # 0x7E denotes start and end of message (HDLC Frame)
   defp parse(<<
               0x7E,
               _::binary-size(16),
               0x09,
               len,
-              _::binary-size(len),
-              data::binary>>,
+              datetime::binary-size(len),
+              rest::binary>>,
             acc) do
-    parse(data, acc)
+    parse(rest, %{meter_time: parse_datetime(len,datetime)})
   end
 
   # message type
@@ -55,19 +61,19 @@ defmodule HanAms.Parser do
 
   # obis list version
   defp parse(<<0x09, len, obis_list_version::binary-size(len), rest::binary>>,
-              %{list: %Lists.ThreeFasesMessageType2{obis_list_version: nil}} = acc) do
+              %{list: %{obis_list_version: nil}} = acc) do
     parse(rest, put_in(acc.list.obis_list_version, obis_list_version))
   end
 
   # gs1
   defp parse(<<0x09, len, gs1::binary-size(len), rest::binary>>,
-               %{list: %Lists.ThreeFasesMessageType2{gs1: nil}} = acc) do
+               %{list: %{gs1: nil}} = acc) do
     parse(rest, put_in(acc.list.gs1, gs1))
   end
 
   # meter model
   defp parse(<<0x09, len, meter_model::binary-size(len), rest::binary>>,
-               %{list: %Lists.ThreeFasesMessageType2{meter_model: nil}} = acc) do
+               %{list: %{meter_model: nil}} = acc) do
     parse(rest, put_in(acc.list.meter_model, meter_model))
   end
 
@@ -126,19 +132,33 @@ defmodule HanAms.Parser do
   end
 
   # datetime
-  defp parse(<<0x09, len, meter_model::binary-size(len), rest::binary>>,
-               %{list: %Lists.ThreeFasesMessageType2{meter_model: nil}} = acc) do
-    parse(rest, put_in(acc.list.meter_model, meter_model))
+  defp parse(<<0x09, len, date_bin::binary-size(len), rest::binary>>,
+               %{list: %{datetime: nil}} = acc) do
+    parse(rest, put_in(acc.list.datetime, parse_datetime(len,date_bin)))
   end
 
+  # Cumulative hourly active import energy (A+) (Q1+Q4)
+  defp parse(<< 0x06, act_energy_pa::size(32), rest::binary>>,
+              %{list: %{act_energy_pa: nil}} = acc) do
+    parse(rest, put_in(acc.list.act_energy_pa, act_energy_pa))
+  end
 
-  defp message_type_to_list(message_type) do
-    case message_type do
-      1 -> %Lists.MessageType1{}
-      13 -> %Lists.ThreeFasesMessageType2{}
-      18 -> %Lists.ThreeFasesMessageType3{}
-    end
+  # Cumulative hourly active export energy (A-) (Q2+Q3)
+  defp parse(<< 0x06, act_energy_ma::size(32), rest::binary>>,
+              %{list: %{act_energy_ma: nil}} = acc) do
+    parse(rest, put_in(acc.list.act_energy_ma, act_energy_ma))
+  end
 
+  # Cumulative hourly reactiveimport energy (R+) (Q1+Q2
+  defp parse(<< 0x06, act_energy_pr::size(32), rest::binary>>,
+              %{list: %{act_energy_pr: nil}} = acc) do
+    parse(rest, put_in(acc.list.act_energy_pr, act_energy_pr))
+  end
+
+  # Cumulative hourly reactive export energy (R-) (Q3+Q4
+  defp parse(<< 0x06, act_energy_mr::size(32), rest::binary>>,
+              %{list: %{act_energy_mr: nil}} = acc) do
+    parse(rest, put_in(acc.list.act_energy_mr, act_energy_mr))
   end
 
   # We done!
@@ -146,11 +166,25 @@ defmodule HanAms.Parser do
     acc
   end
 
+  defp parse_datetime(len, date_bin) do
+    date_rest = len-8
+    <<datetime::binary-size(8), _::binary-size(date_rest)>> = date_bin
+    parseNaiveDateTime(datetime)
+  end
 
-  defp verifyChecksum(binary) do
+  defp message_type_to_list(message_type) do
+    case message_type do
+      1 -> %Lists.MessageType1{}
+      13 -> %Lists.ThreeFasesMessageType2{}
+      18 -> %Lists.ThreeFasesMessageType3{}
+    end
+  end
+
+
+  defp verifyChecksum(<<0x7E, binary::binary>>) do
     length  = byte_size(binary)
 
-    bin = binary_part(binary, 0, length-3)
+    bin = binary_part(binary, 1, length-3)
 
     <<package_checksum::16>> = binary_part(binary, length-3, 2)
     IO.inspect package_checksum
@@ -159,8 +193,8 @@ defmodule HanAms.Parser do
     calculated_checksum = ExCRC.crc16ccitt(bin)
 
     IO.inspect "testlol"
-    IO.inspect package_checksum
     IO.inspect calculated_checksum
     unless package_checksum == calculated_checksum, do: exit("Checksum not matching")
   end
+
 end

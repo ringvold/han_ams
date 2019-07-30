@@ -1,48 +1,48 @@
 defmodule HanAms.Lists do
-
   defmodule MessageType1 do
     defstruct [:act_pow_pos]
   end
 
   defmodule ThreeFasesMessageType2 do
-    defstruct [:obis_list_version,
-            :gs1,
-            :meter_model,
-            :act_pow_pos,
-            :act_pow_neg,
-            :react_pow_pos,
-            :react_pow_neg,
-            :curr_l1,
-            :curr_l2,
-            :curr_l3,
-            :volt_l1,
-            :volt_l2,
-            :volt_l3
-          ]
+    defstruct [
+      :obis_list_version,
+      :gs1,
+      :meter_model,
+      :act_pow_pos,
+      :act_pow_neg,
+      :react_pow_pos,
+      :react_pow_neg,
+      :curr_l1,
+      :curr_l2,
+      :curr_l3,
+      :volt_l1,
+      :volt_l2,
+      :volt_l3
+    ]
   end
 
   defmodule ThreeFasesMessageType3 do
-    defstruct [:obis_list_version,
-            :gs1,
-            :meter_model,
-            :act_pow_pos,
-            :act_pow_neg,
-            :react_pow_pos,
-            :react_pow_neg,
-            :curr_l1,
-            :curr_l2,
-            :curr_l3,
-            :volt_l1,
-            :volt_l2,
-            :volt_l3,
-            :datetime,
-            :act_energy_pa, # Cumulative hourly active import energy (A+) (Q1+Q4)
-            :act_energy_ma, # Cumulative hourly active export energy (A-) (Q2+Q3)
-            :act_energy_pr, # Cumulative hourly reactiveimport energy (R+) (Q1+Q2
-            :act_energy_mr  # Cumulative hourly reactive export energy (R-) (Q3+Q4)
-          ]
+    defstruct [
+      :obis_list_version,
+      :gs1,
+      :meter_model,
+      :act_pow_pos,
+      :act_pow_neg,
+      :react_pow_pos,
+      :react_pow_neg,
+      :curr_l1,
+      :curr_l2,
+      :curr_l3,
+      :volt_l1,
+      :volt_l2,
+      :volt_l3,
+      :datetime,
+      :act_energy_pa,
+      :act_energy_ma,
+      :act_energy_pr,
+      :act_energy_mr
+    ]
   end
-
 end
 
 # type BaseItem struct {
