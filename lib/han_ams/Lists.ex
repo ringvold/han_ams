@@ -43,6 +43,39 @@ defmodule HanAms.Lists do
       :act_energy_mr
     ]
   end
+
+  defmodule TwoFasesMessageType2 do
+    defstruct [
+      :obis_list_version,
+      :gs1,
+      :meter_model,
+      :act_pow_pos,
+      :act_pow_neg,
+      :react_pow_pos,
+      :react_pow_neg,
+      :curr_l1,
+      :volt_l1
+    ]
+  end
+
+  defmodule TowFasesMessageType3 do
+    defstruct [
+      :obis_list_version,
+      :gs1,
+      :meter_model,
+      :act_pow_pos,
+      :act_pow_neg,
+      :react_pow_pos,
+      :react_pow_neg,
+      :curr_l1,
+      :volt_l1,
+      :datetime,
+      :act_energy_pos,
+      :act_energy_neg,
+      :react_energy_pos,
+      :react_energy_neg
+    ]
+  end
 end
 
 # type BaseItem struct {
