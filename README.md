@@ -1,6 +1,8 @@
 # HanAms
 
-**TODO: Add description**
+Decoding av binærdata fra HAN port på strømmåler.
+
+Ressurser: https://drive.google.com/drive/folders/0B3ZvFI0Dg1TDbDBzMU02cnU0Y28
 
 ## Targets
 

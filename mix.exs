@@ -52,7 +52,10 @@ defmodule HanAms.MixProject do
       {:nerves_system_rpi3, "~> 1.6", runtime: false, targets: :rpi3},
       {:nerves_system_rpi3a, "~> 1.6", runtime: false, targets: :rpi3a},
       {:nerves_system_bbb, "~> 2.0", runtime: false, targets: :bbb},
-      {:nerves_system_x86_64, "~> 1.6", runtime: false, targets: :x86_64}
+      {:nerves_system_x86_64, "~> 1.6", runtime: false, targets: :x86_64},
+
+      # HAN decoding deps
+      {:ex_crc, "~> 1.0.0"}
     ]
   end
 end

@@ -3,6 +3,7 @@
   "distillery": {:hex, :distillery, "2.0.14", "25fc1cdad06282334dbf4a11b6e869cc002855c4e11825157498491df2eed594", [:mix], [{:artificery, "~> 0.2", [hex: :artificery, repo: "hexpm", optional: false]}], "hexpm"},
   "dns": {:hex, :dns, "2.1.2", "81c46d39f7934f0e73368355126e4266762cf227ba61d5889635d83b2d64a493", [:mix], [{:socket, "~> 0.3.13", [hex: :socket, repo: "hexpm", optional: false]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm"},
+  "ex_crc": {:hex, :ex_crc, "1.0.0", "07d30dc9444c2dd60cbb86b9394ed1599161c513ea9179eaedd8cdfb40d2a077", [:mix], [], "hexpm"},
   "mdns": {:hex, :mdns, "1.0.3", "f08414daf5636bf5cd364611e838818e9250c91a3282a817ad9174b03e757401", [:mix], [{:dns, "~> 2.0", [hex: :dns, repo: "hexpm", optional: false]}], "hexpm"},
   "nerves": {:hex, :nerves, "1.4.5", "b1a5f41f3909d76e3ca7cec41f050d89f91c8c6755bc35b8d0e9265d9711c184", [:mix], [{:distillery, "~> 2.0.0", [hex: :distillery, repo: "hexpm", optional: false]}, {:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: true]}], "hexpm"},
   "nerves_firmware_ssh": {:hex, :nerves_firmware_ssh, "0.4.4", "12b0d9c84ec9f79c1b0ac0de1c575372ef972d0c58ce21c36bf354062c6222d9", [:mix], [{:nerves_runtime, "~> 0.6", [hex: :nerves_runtime, repo: "hexpm", optional: false]}], "hexpm"},
