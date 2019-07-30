@@ -5,21 +5,23 @@ defmodule HanAms.Parser do
 
   def decode(<<rest::binary>>) do
     ## finn checksum
-    # verifyChecksum(rest) # virker ikka akkurat nå
+    verifyChecksum(rest) # virker ikka akkurat nå
 
     ## fortsett å parse data
     parse(rest, %{})
   end
 
-  # defp parseTimestamp(<<
-  #                     0x7E,
-  #                     _::binary-size(16),
-  #                     0x09,
-  #                     some_length,
-  #                     date::binary-size(8),
-  #                     _::binary>>) do
-  #   parseNaiveDateTime(date)
-  # end
+  defp verifyChecksum(<<0x7E, binary::binary>>) do
+    length = byte_size(binary)
+
+    bin = binary_part(binary, 0, length - 3)
+
+    <<package_checksum::16>> = binary_part(binary, length - 3, 2)
+
+    # This returns 47435 when it should return 33085 :/
+    calculated_checksum = ExCRC.crc16kermit(bin)
+    unless package_checksum != calculated_checksum, do: exit("Checksum not matching")
+  end
 
   defp parseNaiveDateTime(<<
          year::16,
@@ -212,19 +214,4 @@ defmodule HanAms.Parser do
     end
   end
 
-  defp verifyChecksum(<<0x7E, binary::binary>>) do
-    length = byte_size(binary)
-
-    bin = binary_part(binary, 1, length - 3)
-
-    <<package_checksum::16>> = binary_part(binary, length - 3, 2)
-    IO.inspect(package_checksum)
-
-    # This returns 47435 when it should return 33085 :/
-    calculated_checksum = ExCRC.crc16ccitt(bin)
-
-    IO.inspect("testlol")
-    IO.inspect(calculated_checksum)
-    unless package_checksum == calculated_checksum, do: exit("Checksum not matching")
-  end
 end

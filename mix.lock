@@ -1,5 +1,6 @@
 %{
   "artificery": {:hex, :artificery, "0.4.2", "3ded6e29e13113af52811c72f414d1e88f711410cac1b619ab3a2666bbd7efd4", [:mix], [], "hexpm"},
+  "crc": {:hex, :crc, "0.9.2", "6abd1caca749b2626ff3b4eb6d821109fd92d5e6c461739af03b93197dea68ec", [:mix, :rebar3], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "distillery": {:hex, :distillery, "2.0.14", "25fc1cdad06282334dbf4a11b6e869cc002855c4e11825157498491df2eed594", [:mix], [{:artificery, "~> 0.2", [hex: :artificery, repo: "hexpm", optional: false]}], "hexpm"},
   "dns": {:hex, :dns, "2.1.2", "81c46d39f7934f0e73368355126e4266762cf227ba61d5889635d83b2d64a493", [:mix], [{:socket, "~> 0.3.13", [hex: :socket, repo: "hexpm", optional: false]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm"},
