@@ -4,11 +4,9 @@ defmodule HanAms.Parser do
   alias HanAms.Lists
 
   def decode(<<rest::binary>>) do
-
-    ## finn checksum
     verifyChecksum(rest)
 
-    ## fortsett å parse data
+    # Start parsing of data
     parse(rest, %{})
   end
 
@@ -41,13 +39,13 @@ defmodule HanAms.Parser do
   defp parse(
          <<0x7E, _::binary-size(16), 0x09, len, datetime::binary-size(len), rest::binary>>,
          acc
-       ) do
+       )
+       when acc == %{} do
     parse(rest, %{meter_time: parse_datetime(len, datetime)})
   end
 
   # message type
   defp parse(<<0x02, message_type, rest::binary>>, acc) do
-    ''
     parse(rest, put_in(acc[:list], message_type_to_list(message_type)))
   end
 
@@ -213,5 +211,4 @@ defmodule HanAms.Parser do
       18 -> %Lists.ThreeFasesMessageType3{}
     end
   end
-
 end

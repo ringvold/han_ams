@@ -31,7 +31,7 @@ config :logger, backends: [RingLogger]
 keys =
   [
     Path.join([System.user_home!(), ".ssh", "id_rsa.pub"]),
-    Path.join[(System.user_home!(), ".ssh", "id_rsa_mac.pub"]),
+    Path.join([System.user_home!(), ".ssh", "id_rsa_bekk.pub"])
   ]
   |> Enum.filter(&File.exists?/1)
 
