@@ -4,8 +4,9 @@ defmodule HanAms.Parser do
   alias HanAms.Lists
 
   def decode(<<rest::binary>>) do
+
     ## finn checksum
-    verifyChecksum(rest) # virker ikka akkurat nå
+    verifyChecksum(rest)
 
     ## fortsett å parse data
     parse(rest, %{})
@@ -18,7 +19,6 @@ defmodule HanAms.Parser do
 
     <<package_checksum::16>> = binary_part(binary, length - 3, 2)
 
-    # This returns 47435 when it should return 33085 :/
     calculated_checksum = ExCRC.crc16kermit(bin)
     unless package_checksum != calculated_checksum, do: exit("Checksum not matching")
   end
@@ -28,7 +28,7 @@ defmodule HanAms.Parser do
          month,
          day,
          # What is this? Nobody quite knows! ¯\_(ツ)_/¯
-         _,
+         _wut?,
          hour,
          min,
          sec
